@@ -56,9 +56,10 @@ async function run() {
     });
 
     // get donation requests count
-    app.get("/donationsCount", async (req, res) => {
-      const count = await donationCollection.estimatedDocumentCount();
-      console.log(count);
+    app.get("/donationsCount/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { requesterEmail: email };
+      const count = await donationCollection.countDocuments(query);
       res.send({ count });
     });
 
