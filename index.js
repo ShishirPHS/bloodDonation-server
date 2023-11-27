@@ -55,6 +55,22 @@ async function run() {
       res.send(result);
     });
 
+    // for pagination table
+    app.get("/pagination/:email", async (req, res) => {
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
+      const email = req.params.email;
+      const query = { requesterEmail: email };
+      console.log(page, size);
+      const result = await donationCollection
+        .find(query)
+        .skip(page * size)
+        .limit(size)
+        .toArray();
+      console.log(result);
+      res.send(result);
+    });
+
     // get donation requests count
     app.get("/donationsCount/:email", async (req, res) => {
       const email = req.params.email;
