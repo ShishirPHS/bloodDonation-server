@@ -55,6 +55,13 @@ async function run() {
       res.send(result);
     });
 
+    // get donation requests count
+    app.get("/donationsCount", async (req, res) => {
+      const count = await donationCollection.estimatedDocumentCount();
+      console.log(count);
+      res.send({ count });
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
