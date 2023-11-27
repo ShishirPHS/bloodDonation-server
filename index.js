@@ -27,12 +27,23 @@ async function run() {
     // await client.connect();
 
     const userCollection = client.db("bloodDonationDB").collection("users");
+    const donationCollection = client
+      .db("bloodDonationDB")
+      .collection("donations");
 
     // user related api
     app.post("/users", async (req, res) => {
       const user = req.body;
-      console.log(user);
+      //   console.log(user);
       const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+
+    // donation related api
+    app.post("/create-donation", async (req, res) => {
+      const donationRequest = req.body;
+      console.log(donationRequest);
+      const result = await donationCollection.insertOne(donationRequest);
       res.send(result);
     });
 
