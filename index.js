@@ -29,7 +29,7 @@ async function run() {
     const userCollection = client.db("bloodDonationDB").collection("users");
     const donationCollection = client
       .db("bloodDonationDB")
-      .collection("donations");
+      .collection("donationRequests");
 
     // user related api
     app.post("/users", async (req, res) => {
@@ -44,6 +44,14 @@ async function run() {
       const donationRequest = req.body;
       console.log(donationRequest);
       const result = await donationCollection.insertOne(donationRequest);
+      res.send(result);
+    });
+
+    // get all donation's for specific user
+    app.get("/donations/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { requesterEmail: email };
+      const result = await donationCollection.find(query).toArray();
       res.send(result);
     });
 
