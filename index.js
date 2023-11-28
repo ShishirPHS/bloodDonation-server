@@ -72,6 +72,24 @@ async function run() {
       res.send(result);
     });
 
+    // get all users data with pagination
+    app.get("/allUsers/pagination", async (req, res) => {
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
+      const result = await userCollection
+        .find()
+        .skip(page * size)
+        .limit(size)
+        .toArray();
+      res.send(result);
+    });
+
+    // get allUser count
+    app.get("/allUsers", async (req, res) => {
+      const count = await userCollection.estimatedDocumentCount();
+      res.send({ count });
+    });
+
     // --------------------------------------------------------------------------
     //                            donation related api
     // --------------------------------------------------------------------------
@@ -99,6 +117,7 @@ async function run() {
       res.send(result);
     });
 
+    // update donation request
     app.put("/donations/:id", async (req, res) => {
       const id = req.params.id;
       const donation = req.body;
@@ -130,7 +149,7 @@ async function run() {
     });
 
     // --------------------------------------------------------------------------
-    //                            pagination related api
+    //               pagination related api(donation requests table)
     // --------------------------------------------------------------------------
     // for pagination table
     app.get("/pagination/:email", async (req, res) => {
