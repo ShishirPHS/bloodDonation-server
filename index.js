@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -39,7 +39,10 @@ async function run() {
       res.send(result);
     });
 
-    // donation related api
+    // --------------------------------------------------------------------------
+    //                            donation related api
+    // --------------------------------------------------------------------------
+    // create donation requests
     app.post("/create-donation", async (req, res) => {
       const donationRequest = req.body;
       console.log(donationRequest);
@@ -55,6 +58,17 @@ async function run() {
       res.send(result);
     });
 
+    // delete donation request
+    app.delete("/donations/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await donationCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // --------------------------------------------------------------------------
+    //                            pagination related api
+    // --------------------------------------------------------------------------
     // for pagination table
     app.get("/pagination/:email", async (req, res) => {
       const page = parseInt(req.query.page);
