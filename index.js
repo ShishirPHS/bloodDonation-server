@@ -31,11 +31,23 @@ async function run() {
       .db("bloodDonationDB")
       .collection("donationRequests");
 
-    // user related api
+    // --------------------------------------------------------------------------
+    //                            user related api
+    // --------------------------------------------------------------------------
+    // save user's info to the database
     app.post("/users", async (req, res) => {
       const user = req.body;
       //   console.log(user);
       const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+
+    // get specific user
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await userCollection.findOne(query);
+      console.log(result);
       res.send(result);
     });
 
