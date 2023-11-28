@@ -45,7 +45,7 @@ async function run() {
     // create donation requests
     app.post("/create-donation", async (req, res) => {
       const donationRequest = req.body;
-      console.log(donationRequest);
+      // console.log(donationRequest);
       const result = await donationCollection.insertOne(donationRequest);
       res.send(result);
     });
@@ -55,6 +55,36 @@ async function run() {
       const email = req.params.email;
       const query = { requesterEmail: email };
       const result = await donationCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // get specific donation data
+    app.get("/donation/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await donationCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.put("/donations/:id", async (req, res) => {
+      const id = req.params.id;
+      const donation = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          requesterName: donation.requesterName,
+          requesterEmail: donation.requesterEmail,
+          recipientName: donation.recipientName,
+          recipientDistrict: donation.recipientDistrict,
+          recipientUpazila: donation.recipientUpazila,
+          hospitalName: donation.hospitalName,
+          fullAddress: donation.fullAddress,
+          donationDate: donation.donationDate,
+          donationTime: donation.donationTime,
+          requestMessage: donation.requestMessage,
+        },
+      };
+      const result = await donationCollection.updateOne(query, updateDoc);
       res.send(result);
     });
 
@@ -75,13 +105,11 @@ async function run() {
       const size = parseInt(req.query.size);
       const email = req.params.email;
       const query = { requesterEmail: email };
-      console.log(page, size);
       const result = await donationCollection
         .find(query)
         .skip(page * size)
         .limit(size)
         .toArray();
-      console.log(result);
       res.send(result);
     });
 
