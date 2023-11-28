@@ -43,10 +43,32 @@ async function run() {
     });
 
     // get specific user
-    app.get("/users/:email", async (req, res) => {
+    app.get("/users/:id", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const result = await userCollection.findOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
+    // update specific user's info
+    app.put("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const user = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          name: user.name,
+          email: user.email,
+          photo: user.photo,
+          bloodGroup: user.bloodGroup,
+          district: user.district,
+          upazila: user.upazila,
+          role: user.role,
+          status: user.status,
+        },
+      };
+      const result = await userCollection.updateOne(query, updateDoc);
       console.log(result);
       res.send(result);
     });
