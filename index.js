@@ -151,7 +151,7 @@ async function run() {
     // --------------------------------------------------------------------------
     //               pagination related api(donation requests table)
     // --------------------------------------------------------------------------
-    // for pagination table
+    // pagination table data(for specific user's donation requests)
     app.get("/pagination/:email", async (req, res) => {
       const page = parseInt(req.query.page);
       const size = parseInt(req.query.size);
@@ -165,11 +165,30 @@ async function run() {
       res.send(result);
     });
 
-    // get donation requests count
+    // get donation requests count(for specific user)
     app.get("/donationsCount/:email", async (req, res) => {
       const email = req.params.email;
       const query = { requesterEmail: email };
       const count = await donationCollection.countDocuments(query);
+      res.send({ count });
+    });
+
+    // for pagination table data(for all donation requests)
+    app.get("/allDonation/pagination", async (req, res) => {
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
+      const result = await donationCollection
+        .find()
+        .skip(page * size)
+        .limit(size)
+        .toArray();
+
+      res.send(result);
+    });
+
+    // get all donation requests count
+    app.get("/allDonationsCount", async (req, res) => {
+      const count = await donationCollection.estimatedDocumentCount();
       res.send({ count });
     });
 
