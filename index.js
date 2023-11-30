@@ -183,6 +183,28 @@ async function run() {
       res.send(result);
     });
 
+    // update donation request's status
+    app.patch("/donations/:id", async (req, res) => {
+      const id = req.params.id;
+      const donation = req.body;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          donationStatus: donation.donationStatus,
+          donorName: donation.donorName,
+          donorEmail: donation.donorEmail,
+        },
+      };
+      console.log(updateDoc);
+      const result = await donationCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+
     // delete donation request
     app.delete("/donations/:id", async (req, res) => {
       const id = req.params.id;
