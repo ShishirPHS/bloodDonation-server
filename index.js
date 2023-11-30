@@ -56,6 +56,24 @@ async function run() {
       res.send(result);
     });
 
+    // update blog's status
+    app.put("/blog/:id", async (req, res) => {
+      const id = req.params.id;
+      const blog = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          blogTitle: blog.blogTitle,
+          thumbnailImage: blog.thumbnailImage,
+          content: blog.content,
+          status: blog.status,
+        },
+      };
+      const result = await blogCollection.updateOne(query, updateDoc);
+      console.log(result);
+      res.send(result);
+    });
+
     // --------------------------------------------------------------------------
     //                            user related api
     // --------------------------------------------------------------------------
