@@ -42,6 +42,12 @@ async function run() {
       res.send(result);
     });
 
+    // get all blogs
+    app.get("/blogs", async (req, res) => {
+      const result = await blogCollection.find().toArray();
+      res.send(result);
+    });
+
     // --------------------------------------------------------------------------
     //                            user related api
     // --------------------------------------------------------------------------
