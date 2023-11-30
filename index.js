@@ -30,6 +30,17 @@ async function run() {
     const donationCollection = client
       .db("bloodDonationDB")
       .collection("donationRequests");
+    const blogCollection = client.db("bloodDonationDB").collection("blogs");
+
+    // --------------------------------------------------------------------------
+    //                            blog related api
+    // --------------------------------------------------------------------------
+    // save blog to the database
+    app.post("/blogs", async (req, res) => {
+      const blog = req.body;
+      const result = await blogCollection.insertOne(blog);
+      res.send(result);
+    });
 
     // --------------------------------------------------------------------------
     //                            user related api
