@@ -48,6 +48,14 @@ async function run() {
       res.send(result);
     });
 
+    // delete blog
+    app.delete("/blogs/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await blogCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // --------------------------------------------------------------------------
     //                            user related api
     // --------------------------------------------------------------------------
