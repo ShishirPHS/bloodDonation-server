@@ -48,6 +48,13 @@ async function run() {
       res.send(result);
     });
 
+    // get published blogs
+    app.get("/publishedBlogs", async (req, res) => {
+      const query = { status: "published" };
+      const result = await blogCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // delete blog
     app.delete("/blogs/:id", async (req, res) => {
       const id = req.params.id;
