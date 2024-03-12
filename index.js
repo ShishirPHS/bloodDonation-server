@@ -122,6 +122,12 @@ async function run() {
       res.send(result);
     });
 
+    // get all donors data(temporary api)
+    app.get("/allDonors", async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+
     // get all users data with pagination
     app.get("/allUsers/pagination", async (req, res) => {
       const page = parseInt(req.query.page);
