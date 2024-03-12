@@ -264,6 +264,25 @@ async function run() {
       res.send({ count });
     });
 
+    // --------------------------------------------------------------------------
+    //                            search donor related api
+    // --------------------------------------------------------------------------
+    app.get("/donors/search", async (req, res) => {
+      const { bloodGroup, district, upazila } = req.query;
+      const query = {};
+
+      if (bloodGroup) query.bloodGroup = bloodGroup;
+      if (district) query.district = district;
+      if (upazila) query.upazila = upazila;
+
+      try {
+        const donors = await userCollection.find(query).toArray();
+        res.send(donors);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+    });
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     // console.log(
