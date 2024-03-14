@@ -226,6 +226,16 @@ async function run() {
       res.send(result);
     });
 
+    // get pending donation requests
+    app.get("/pendingDonations", async (req, res) => {
+      const query = {
+        donationStatus: "pending",
+      };
+      const result = await donationCollection.find(query).toArray();
+      console.log(result);
+      res.send(result);
+    });
+
     // --------------------------------------------------------------------------
     //               pagination related api(donation requests table)
     // --------------------------------------------------------------------------
